@@ -1,5 +1,7 @@
+#FASE 2
+#DDL(Criação das tabelas)
 
-CREATE DATABASE biblioteca_lafp;
+CREATE DATABASE IF NOT EXISTS biblioteca_lafp;
 
 USE biblioteca_lafp;
 
@@ -71,7 +73,7 @@ CREATE TABLE LAFP_LIVRO_CATEGORIA (
 CREATE TABLE LAFP_EXEMPLAR (
     id_exemplar INT AUTO_INCREMENT PRIMARY KEY,
     codigo_tombo VARCHAR(30) NOT NULL UNIQUE,
-    status VARCHAR(30) NOT NULL DEFAULT 'disponivel',
+    status VARCHAR(30) NOT NULL,
     data_aquisicao DATE NOT NULL,
     id_livro INT NOT NULL,
     CHECK (status IN (
@@ -90,7 +92,7 @@ CREATE TABLE LAFP_EMPRESTIMO (
     data_emprestimo DATE NOT NULL,
     data_prevista_devolucao DATE NOT NULL,
     data_devolucao DATE,
-    status VARCHAR(30) NOT NULL DEFAULT 'ativo',
+    status VARCHAR(30) NOT NULL,
     id_usuario INT NOT NULL,
     id_funcionario INT NOT NULL,
     CHECK (status IN (
@@ -99,7 +101,6 @@ CREATE TABLE LAFP_EMPRESTIMO (
         'atrasado',
         'cancelado'
     )),
-    CHECK (data_prevista_devolucao >= data_emprestimo),
     FOREIGN KEY (id_usuario)
         REFERENCES LAFP_USUARIO(id_usuario),
     FOREIGN KEY (id_funcionario)
@@ -119,7 +120,7 @@ CREATE TABLE LAFP_EMPRESTIMO_EXEMPLAR (
 CREATE TABLE LAFP_RESERVA (
     id_reserva INT AUTO_INCREMENT PRIMARY KEY,
     data_reserva DATE NOT NULL,
-    status VARCHAR(30) NOT NULL DEFAULT 'ativa',
+    status VARCHAR(30) NOT NULL,
     id_usuario INT NOT NULL,
     id_livro INT NOT NULL,
     CHECK (status IN (
@@ -139,7 +140,7 @@ CREATE TABLE LAFP_MULTA (
     valor DECIMAL(8,2) NOT NULL,
     motivo VARCHAR(255) NOT NULL,
     data_multa DATE NOT NULL,
-    status_pagamento VARCHAR(30) NOT NULL DEFAULT 'pendente',
+    status_pagamento VARCHAR(30) NOT NULL,
     id_emprestimo INT NOT NULL,
     CHECK (valor >= 0),
     CHECK (status_pagamento IN (
